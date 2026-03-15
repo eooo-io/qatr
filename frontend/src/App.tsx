@@ -6,6 +6,9 @@ import { RegisterPage } from '@/pages/RegisterPage'
 import { ProjectsPage } from '@/pages/ProjectsPage'
 import { TestPlansPage } from '@/pages/TestPlansPage'
 import { TestPlanDetailPage } from '@/pages/TestPlanDetailPage'
+import { ReleasesPage } from '@/pages/ReleasesPage'
+import { ReleaseDetailPage } from '@/pages/ReleaseDetailPage'
+import { TestRunPage } from '@/pages/TestRunPage'
 import { useLocation, useNavigate, matchRoute } from '@/lib/router'
 import { useAuthStore } from '@/stores/auth'
 
@@ -34,10 +37,38 @@ function Router() {
   // Authenticated routes
   let content: React.ReactNode
 
+  const runMatch = matchRoute('/runs/:runId', path)
+  const releaseDetailMatch = matchRoute('/projects/:projectId/releases/:releaseId', path)
+  const releasesMatch = matchRoute('/projects/:projectId/releases', path)
   const planDetailMatch = matchRoute('/projects/:projectId/test-plans/:planId', path)
   const testPlansMatch = matchRoute('/projects/:projectId/test-plans', path)
 
-  if (planDetailMatch) {
+  if (runMatch) {
+    const params = new URLSearchParams(window.location.search)
+    const releaseId = Number(params.get('releaseId') || 0)
+    content = (
+      <TestRunPage
+        runId={Number(runMatch.runId)}
+        releaseId={releaseId}
+        onNavigate={navigate}
+      />
+    )
+  } else if (releaseDetailMatch) {
+    content = (
+      <ReleaseDetailPage
+        projectId={Number(releaseDetailMatch.projectId)}
+        releaseId={Number(releaseDetailMatch.releaseId)}
+        onNavigate={navigate}
+      />
+    )
+  } else if (releasesMatch) {
+    content = (
+      <ReleasesPage
+        projectId={Number(releasesMatch.projectId)}
+        onNavigate={navigate}
+      />
+    )
+  } else if (planDetailMatch) {
     content = (
       <TestPlanDetailPage
         projectId={Number(planDetailMatch.projectId)}

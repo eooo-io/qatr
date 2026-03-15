@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TestCase extends Model
 {
@@ -52,5 +53,10 @@ class TestCase extends Model
     public function dependents(): BelongsToMany
     {
         return $this->belongsToMany(self::class, 'test_case_dependencies', 'depends_on_id', 'test_case_id');
+    }
+
+    public function results(): HasMany
+    {
+        return $this->hasMany(TestCaseResult::class);
     }
 }
