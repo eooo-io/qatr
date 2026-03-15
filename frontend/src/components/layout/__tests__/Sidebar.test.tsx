@@ -1,15 +1,17 @@
 import { render, screen } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { Sidebar } from '../Sidebar'
+
+const mockNavigate = vi.fn()
 
 describe('Sidebar', () => {
   it('renders the QATR brand name', () => {
-    render(<Sidebar />)
+    render(<Sidebar onNavigate={mockNavigate} />)
     expect(screen.getByText('QATR')).toBeInTheDocument()
   })
 
   it('renders all navigation links', () => {
-    render(<Sidebar />)
+    render(<Sidebar onNavigate={mockNavigate} />)
     expect(screen.getByText('Dashboard')).toBeInTheDocument()
     expect(screen.getByText('Test Plans')).toBeInTheDocument()
     expect(screen.getByText('Releases')).toBeInTheDocument()
@@ -19,7 +21,7 @@ describe('Sidebar', () => {
   })
 
   it('has proper navigation landmark', () => {
-    render(<Sidebar />)
+    render(<Sidebar onNavigate={mockNavigate} />)
     expect(screen.getByRole('navigation', { name: /main navigation/i })).toBeInTheDocument()
   })
 })
