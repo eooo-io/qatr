@@ -43,4 +43,9 @@ class TestPlan extends Model
     {
         return $this->hasManyThrough(TestCase::class, TestScenario::class);
     }
+
+    public function testRuns(): HasMany
+    {
+        return $this->hasMany(TestRun::class);
+    }
 }

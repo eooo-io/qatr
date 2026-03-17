@@ -71,6 +71,89 @@ export interface Tag {
   color: string
 }
 
+export interface Release {
+  id: number
+  version: string
+  name: string
+  description: string | null
+  release_date: string | null
+  status: 'planning' | 'in_progress' | 'released'
+  project_id: number
+  created_by: number
+  test_runs_count?: number
+  test_runs?: TestRun[]
+  created_at: string
+  updated_at: string
+}
+
+export interface TestRun {
+  id: number
+  test_plan_id: number
+  release_id: number
+  executor_id: number
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled'
+  started_at: string | null
+  completed_at: string | null
+  environment: Record<string, string> | null
+  test_plan?: TestPlan
+  release?: Release
+  results?: TestCaseResult[]
+  results_count?: number
+  created_at: string
+  updated_at: string
+}
+
+export interface TestCaseResult {
+  id: number
+  test_run_id: number
+  test_case_id: number
+  status: 'pending' | 'passed' | 'failed' | 'blocked' | 'skipped' | 'in_progress'
+  actual_result: string | null
+  notes: string | null
+  attachments: string[] | null
+  duration_seconds: number | null
+  executed_by: number | null
+  executed_at: string | null
+  test_case?: TestCase
+  defects?: Defect[]
+  defects_count?: number
+  created_at: string
+  updated_at: string
+}
+
+export interface Defect {
+  id: number
+  test_case_result_id: number
+  title: string
+  description: string | null
+  severity: 'critical' | 'high' | 'medium' | 'low'
+  status: 'open' | 'in_progress' | 'resolved' | 'closed'
+  external_tracker_url: string | null
+  reported_by: number
+  created_at: string
+  updated_at: string
+}
+
+export interface RunProgress {
+  total: number
+  passed: number
+  failed: number
+  blocked: number
+  skipped: number
+  in_progress: number
+  pending: number
+  completed_percentage: number
+}
+
+export interface VersionSuggestions {
+  latest: string | null
+  suggestions: {
+    patch: string
+    minor: string
+    major: string
+  }
+}
+
 export interface PaginatedResponse<T> {
   data: T[]
   meta: {
